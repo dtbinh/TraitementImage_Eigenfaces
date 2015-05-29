@@ -57,7 +57,8 @@ end
 
 
 // mean image
-m=mean(S,2);  // obtains the mean of each row instead of each column
+disp(S)
+m=mean(S,'c');  // obtains the mean of each row instead of each column
 tmimg=uint8(m); // converts to unsigned 8-bit integer. Values range from 0 to 255
 img=matrix(tmimg,icol,irow); // takes the N1*N2x1 vector and creates a N1xN2 matrix
 img=img';
