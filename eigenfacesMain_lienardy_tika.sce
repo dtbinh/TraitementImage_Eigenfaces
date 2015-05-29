@@ -19,7 +19,8 @@ figure(1);
 
 for i=1:nbDossiers
     for j=1:nbImages
-        chemin='C:\Users\Morgan\Documents\&&Boulot\ENSSAT\IMR2\Traitements_images\Eigenfaces\s';
+        //chemin='C:\Users\Morgan\Documents\&&Boulot\ENSSAT\IMR2\Traitements_images\Eigenfaces\s';
+        chemin='C:\Users\Jihade\Documents\ENSSAT2\Traitement_images\Cariou\Projet_Eigenfaces\s';
         str=chemin+string(i)+'/'+string(j)+'.pgm';
         img=imread(str);
         // Nombre des lignes (N1) et des colonnes (N2)
