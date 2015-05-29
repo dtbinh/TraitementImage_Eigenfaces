@@ -19,12 +19,13 @@ figure(1);
 
 for i=1:nbDossiers
     for j=1:nbImages
-        str='s'+string(i)+'/'+string(j)+'.pgm';
+        chemin='C:\Users\Morgan\Documents\&&Boulot\ENSSAT\IMR2\Traitements_images\Eigenfaces\s';
+        str=chemin+string(i)+'/'+string(j)+'.pgm';
         img=imread(str);
         // Nombre des lignes (N1) et des colonnes (N2)
         [irow icol]=size(img);
         //creation de (N1*N2)x1 vecteurs
-        temp=reshape(img',irow*icol,1);
+        temp=matrix(img',irow*icol,1);
         // S=N1*N2xM matrices après la fin de la séquence
         S=[S temp];
     end
@@ -39,15 +40,16 @@ for i=1:size(S,2)
     S(:,i)=(temp-m)*ustd/st+um;
 end
 
-endfunction
 //Affichage des images normalisées
+abc=0
 for i=1:nbDossiers
     for j=1:nbImages
+        abc=abc+1;
         str='s'+string(i)+'/'+string(j)+'.pgm';
-        img=reshape(S(:,i),icol,irow);
+        img=matrix(S(:,i),icol,irow);
         img=img';
         imwrite(img,str);
-        subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
+        subplot(ceil(sqrt(nbDossiers*nbImages)),ceil(sqrt(nbDossiers*nbImages)),abc)
         imshow(img)
         drawnow;
     end
@@ -57,7 +59,7 @@ end
 // mean image
 m=mean(S,2);  // obtains the mean of each row instead of each column
 tmimg=uint8(m); // converts to unsigned 8-bit integer. Values range from 0 to 255
-img=reshape(tmimg,icol,irow); // takes the N1*N2x1 vector and creates a N1xN2 matrix
+img=matrix(tmimg,icol,irow); // takes the N1*N2x1 vector and creates a N1xN2 matrix
 img=img';
 figure(3);
 imshow(img);
@@ -126,7 +128,7 @@ end
 // show eigenfaces
 figure(4);
 for i=1:size(u,2)
-    img=reshape(u(:,i),icol,irow);
+    img=matrix(u(:,i),icol,irow);
     img=img';
     img=histeq(img,255);
     subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
@@ -160,7 +162,7 @@ InputImage = imread(strcat('D:\Documents and Settings\sis26\Desktop\',InputImage
 figure(5)
 subplot(1,2,1)
 imshow(InputImage); colormap('gray');title('Input image','fontsize',18)
-InImage=reshape(double(InputImage)',irow*icol,1);
+InImage=matrix(double(InputImage)',irow*icol,1);
 temp=InImage;
 me=mean(temp);
 st=std(temp);
@@ -174,12 +176,12 @@ for i = 1:aa
     pare = dot(NormImage,u(:,i));
     p = [p; pare];
 end
-ReshapedImage = m + u(:,1:aa)*p; //m is the mean image, u is the eigenvector
-ReshapedImage = reshape(ReshapedImage,icol,irow);
-ReshapedImage = ReshapedImage';
+matrixdImage = m + u(:,1:aa)*p; //m is the mean image, u is the eigenvector
+matrixdImage = matrix(matrixdImage,icol,irow);
+matrixdImage = matrixdImage';
 //show the reconstructed image.
 subplot(1,2,2)
-imagesc(ReshapedImage); colormap('gray');
+imagesc(matrixdImage); colormap('gray');
 title('Reconstructed image','fontsize',18)
 
 InImWeight = [];
