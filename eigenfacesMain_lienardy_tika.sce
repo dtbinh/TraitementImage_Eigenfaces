@@ -43,23 +43,26 @@ end
 //Affichage des images normalisées
 figure(2);
 for i=1:M
-str=strcat(int2str(i),'.jpg');
-img=reshape(S(:,i),icol,irow);
-img=img';
-eval('imwrite(img,str)');
-subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
-imshow(img)
-drawnow;
-if i==3
-title('Normalized Training Set','fontsize',18)
-end
+    str=strcat(int2str(i),'.jpg');
+    img=reshape(S(:,i),icol,irow);
+    img=img';
+    eval('imwrite(img,str)');
+    subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
+    imshow(img)
+    drawnow;
+    if i==3
+        title('Normalized Training Set','fontsize',18)
+    end
 end
 
 
-% mean image
-m=mean(S,2);  % obtains the mean of each row instead of each column
-tmimg=uint8(m); % converts to unsigned 8-bit integer. Values range from 0 to 255
-img=reshape(tmimg,icol,irow); % takes the N1*N2x1 vector and creates a N1xN2 matrix
+// mean de l'image
+//On obtient la moyenne de chaque ligne au lieu de chaque colonne
+m=mean(S,2);
+// convertir en entiers de 8 bits. Valeurs de 0 à 255
+tmimg=uint8(m); 
+//Récupérer les N1*N2x1 vecteurs et créer une matrice de taille N1xN2
+img=reshape(tmimg,icol,irow); 
 img=img';
 figure(3);
 imshow(img);
