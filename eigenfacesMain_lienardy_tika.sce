@@ -121,16 +121,15 @@ end
 
 // show eigenfaces
 figure(4);
+abc=0
 for i=1:size(u,2)
+    abc=abc+1
     img=matrix(u(:,i),icol,irow);
     img=img';
-    img=histeq(img,255);
-    subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
+    //img=histeq(img,255);
+    subplot(ceil(sqrt(nbDossiers*nbImages)),ceil(sqrt(nbDossiers*nbImages)),abc)
     imshow(img)
     drawnow;
-    if i==3
-        title('Eigenfaces','fontsize',18)
-    end
 end
 
 
@@ -140,7 +139,7 @@ for h=1:size(Sd,2)
     WW=[];
     for i=1:size(u,2)
         t = u(:,i)';
-        WeightOfImage = dot(t,Sd(:,h)');
+        WeightOfImage = t.*Sd(:,h)';
         WW = [WW; WeightOfImage];
     end
     omega = [omega WW];
