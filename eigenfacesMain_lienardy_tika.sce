@@ -79,10 +79,10 @@ L=A*A';
 v=[];
 d=[];
 for i=1:size(vv,2)
-if(dd(i,i)>1e-4)
-v=[v vv(:,i)];
-d=[d dd(i,i)];
-end
+    if(dd(i,i)>1e-4)
+        v=[v vv(:,i)];
+        d=[d dd(i,i)];
+    end
 end
 
 //sort, will return an ascending sequence
@@ -92,9 +92,9 @@ dtemp=zeros(size(index));
 vtemp=zeros(size(v));
 len=length(index);
 for i=1:len
-dtemp(i)=B(len+1-i);
-ind(i)=len+1-index(i);
-vtemp(:,ind(i))=v(:,i);
+    dtemp(i)=B(len+1-i);
+    ind(i)=len+1-index(i);
+    vtemp(:,ind(i))=v(:,i);
 end
 d=dtemp;
 v=vtemp;
@@ -102,51 +102,51 @@ v=vtemp;
 
 //Normalization of eigenvectors
 for i=1:size(v,2) //access each column
-kk=v(:,i);
-temp=sqrt(sum(kk.^2));
-v(:,i)=v(:,i)./temp;
+    kk=v(:,i);
+    temp=sqrt(sum(kk.^2));
+    v(:,i)=v(:,i)./temp;
 end
 
 //Eigenvectors of C matrix
 u=[];
 for i=1:size(v,2)
-temp=sqrt(d(i));
-u=[u (dbx*v(:,i))./temp];
+    temp=sqrt(d(i));
+    u=[u (dbx*v(:,i))./temp];
 end
 
 //Normalization of eigenvectors
 for i=1:size(u,2)
-kk=u(:,i);
-temp=sqrt(sum(kk.^2));
-u(:,i)=u(:,i)./temp;
+    kk=u(:,i);
+    temp=sqrt(sum(kk.^2));
+    u(:,i)=u(:,i)./temp;
 end
 
 
 // show eigenfaces
 figure(4);
 for i=1:size(u,2)
-img=reshape(u(:,i),icol,irow);
-img=img';
-img=histeq(img,255);
-subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
-imshow(img)
-drawnow;
-if i==3
-title('Eigenfaces','fontsize',18)
-end
+    img=reshape(u(:,i),icol,irow);
+    img=img';
+    img=histeq(img,255);
+    subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
+    imshow(img)
+    drawnow;
+    if i==3
+        title('Eigenfaces','fontsize',18)
+    end
 end
 
 
 // Find the weight of each face in the training set
 omega = [];
 for h=1:size(dbx,2)
-WW=[];
-for i=1:size(u,2)
-t = u(:,i)';
-WeightOfImage = dot(t,dbx(:,h)');
-WW = [WW; WeightOfImage];
-end
-omega = [omega WW];
+    WW=[];
+    for i=1:size(u,2)
+        t = u(:,i)';
+        WeightOfImage = dot(t,dbx(:,h)');
+        WW = [WW; WeightOfImage];
+    end
+    omega = [omega WW];
 end
 
 
@@ -170,8 +170,8 @@ Difference = temp-m;
 p = [];
 aa=size(u,2);
 for i = 1:aa
-pare = dot(NormImage,u(:,i));
-p = [p; pare];
+    pare = dot(NormImage,u(:,i));
+    p = [p; pare];
 end
 ReshapedImage = m + u(:,1:aa)*p; //m is the mean image, u is the eigenvector
 ReshapedImage = reshape(ReshapedImage,icol,irow);
@@ -183,9 +183,9 @@ title('Reconstructed image','fontsize',18)
 
 InImWeight = [];
 for i=1:size(u,2)
-t = u(:,i)';
-WeightOfInputImage = dot(t,Difference');
-InImWeight = [InImWeight; WeightOfInputImage];
+    t = u(:,i)';
+    WeightOfInputImage = dot(t,Difference');
+    InImWeight = [InImWeight; WeightOfInputImage];
 end
 
 ll = 1:M;
@@ -197,10 +197,10 @@ title('Weight of Input Face','fontsize',14)
 // Find Euclidean distance
 e=[];
 for i=1:size(omega,2)
-q = omega(:,i);
-DiffWeight = InImWeight-q;
-mag = norm(DiffWeight);
-e = [e mag];
+    q = omega(:,i);
+    DiffWeight = InImWeight-q;
+    mag = norm(DiffWeight);
+    e = [e mag];
 end
 
 kk = 1:size(e,2);
