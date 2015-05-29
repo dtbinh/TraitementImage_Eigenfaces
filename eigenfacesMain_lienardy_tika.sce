@@ -57,27 +57,19 @@ end
 
 
 // mean image
-disp(S)
-m=mean(S,'c');  // obtains the mean of each row instead of each column
+Sd=double(S);
+m=mean(Sd,'c');  // obtains the mean of each row instead of each column
 tmimg=uint8(m); // converts to unsigned 8-bit integer. Values range from 0 to 255
 img=matrix(tmimg,icol,irow); // takes the N1*N2x1 vector and creates a N1xN2 matrix
 img=img';
 figure(3);
 imshow(img);
-title('Mean Image','fontsize',18)
-
-// Change image for manipulation
-dbx=[];    // A matrix
-for i=1:M
-temp=double(S(:,i));
-dbx=[dbx temp];
-end
 
 //Covariance matrix C=A'A, L=AA'
-A=dbx';
+A=Sd';
 L=A*A';
 // vv are the eigenvector for L
-// dd are the eigenvalue for both L=dbx'*dbx and C=dbx*dbx';
+// dd are the eigenvalue for both L=Sd'*Sd and C=Sd*Sd';
 [vv dd]=eig(L);
 // Sort and eliminate those whose eigenvalue is zero
 v=[];
@@ -115,7 +107,7 @@ end
 u=[];
 for i=1:size(v,2)
     temp=sqrt(d(i));
-    u=[u (dbx*v(:,i))./temp];
+    u=[u (Sd*v(:,i))./temp];
 end
 
 //Normalization of eigenvectors
@@ -143,11 +135,11 @@ end
 
 // Find the weight of each face in the training set
 omega = [];
-for h=1:size(dbx,2)
+for h=1:size(Sd,2)
     WW=[];
     for i=1:size(u,2)
         t = u(:,i)';
-        WeightOfImage = dot(t,dbx(:,h)');
+        WeightOfImage = dot(t,Sd(:,h)');
         WW = [WW; WeightOfImage];
     end
     omega = [omega WW];
