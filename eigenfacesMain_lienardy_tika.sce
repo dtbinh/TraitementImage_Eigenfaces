@@ -6,7 +6,7 @@
 
 //Nombre des images dans notre base de données 
 nbDossiers=20;
-nbIMages=5;
+nbImages=5;
 
 //std and mean choisis
 um=100;
@@ -14,7 +14,7 @@ ustd=80;
 
 //Lecture et affichage des images 
 //Créer une matrice vide d'images
-S[];
+S=[];
 figure(1);
 
 for i=1:nbDossiers
@@ -39,6 +39,7 @@ for i=1:size(S,2)
     S(:,i)=(temp-m)*ustd/st+um;
 end
 
+endfunction
 //Affichage des images normalisées
 for i=1:nbDossiers
     for j=1:nbImages
