@@ -5,7 +5,8 @@
 //---------------------------------------------------------------
 
 //Nombre des images dans notre base de données 
-M=40
+nbDossiers=20;
+nbIMages=5;
 
 //std and mean choisis
 um=100;
@@ -16,20 +17,17 @@ ustd=80;
 S[];
 figure(1);
 
-for i=1:M
-    eval('img=imread(str);');
-    subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
-    imshow(img)
-    if i==3
-        title('Training set','fontsize',18)
+for i=1:nbDossiers
+    for j=1:nbImages
+        str='s'+string(i)+'/'+string(j)+'.pgm';
+        img=imread(str);
+        // Nombre des lignes (N1) et des colonnes (N2)
+        [irow icol]=size(img);
+        //creation de (N1*N2)x1 vecteurs
+        temp=reshape(img',irow*icol,1);
+        // S=N1*N2xM matrices après la fin de la séquence
+        S=[S temp];
     end
-    drawnow;
-    // Nombre des lignes (N1) et des colonnes (N2)
-    [irow icol]=size(img);
-    //creation de (N1*N2)x1 vecteurs
-    temp=reshape(img',irow*icol,1);
-    // S=N1*N2xM matrices après la fin de la séquence
-    S=[S temp];
 end
 
 
