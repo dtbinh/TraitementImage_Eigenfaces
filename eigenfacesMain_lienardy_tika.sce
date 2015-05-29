@@ -36,13 +36,13 @@ end
 //On change mean et std de toutes les images. On normalise toutes les images.
 % This is done to reduce the error due to lighting conditions and background.
 for i=1:size(S,2)
-temp=double(S(:,i));
-m=mean(temp);
-st=std(temp);
-S(:,i)=(temp-m)*ustd/st+um;
+    temp=double(S(:,i));
+    m=mean(temp);
+    st=std(temp);
+    S(:,i)=(temp-m)*ustd/st+um;
 end
 
-% show normalized images
+//Affichage des images normalisées
 figure(2);
 for i=1:M
 str=strcat(int2str(i),'.jpg');
