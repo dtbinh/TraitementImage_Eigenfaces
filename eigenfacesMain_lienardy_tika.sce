@@ -32,27 +32,24 @@ end
 
 
 //On change mean et std de toutes les images. On normalise toutes les images.
-% This is done to reduce the error due to lighting conditions and background.
 for i=1:size(S,2)
     temp=double(S(:,i));
     m=mean(temp);
-    st=std(temp);
+    st=stdev(temp);
     S(:,i)=(temp-m)*ustd/st+um;
 end
 
 //Affichage des images normalisées
-figure(2);
-for i=1:M
-str=strcat(int2str(i),'.jpg');
-img=reshape(S(:,i),icol,irow);
-img=img';
-eval('imwrite(img,str)');
-subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
-imshow(img)
-drawnow;
-if i==3
-title('Normalized Training Set','fontsize',18)
-end
+for i=1:nbDossiers
+    for j=1:nbImages
+        str='s'+string(i)+'/'+string(j)+'.pgm';
+        img=reshape(S(:,i),icol,irow);
+        img=img';
+        imwrite(img,str);
+        subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
+        imshow(img)
+        drawnow;
+    end
 end
 
 
