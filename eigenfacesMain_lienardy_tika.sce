@@ -19,8 +19,8 @@ figure(1);
 
 for i=1:nbDossiers
     for j=1:nbImages
-        //chemin='C:\Users\Morgan\Documents\&&Boulot\ENSSAT\IMR2\Traitements_images\Eigenfaces\s';
-        chemin='C:\Users\Jihade\Documents\ENSSAT2\Traitement_images\Cariou\Projet_Eigenfaces\s';
+        chemin='C:\Users\Morgan\Documents\&&Boulot\ENSSAT\IMR2\Traitements_images\Eigenfaces\s';
+        //chemin='C:\Users\Jihade\Documents\ENSSAT2\Traitement_images\Cariou\Projet_Eigenfaces\s';
         str=chemin+string(i)+'/'+string(j)+'.pgm';
         img=imread(str);
         // Nombre des lignes (N1) et des colonnes (N2)
@@ -84,14 +84,14 @@ end
 
 //sort, will return an ascending sequence
 [B index]=gsort(d,'g','i');
-ind=zeros(size(index));
-dtemp=zeros(size(index));
-vtemp=zeros(size(v));
+ind=zeros(size(index,1),size(index,2));
+dtemp=zeros(size(index,1),size(index,2));
+vtemp=zeros(size(v,1),size(v,2));
 len=length(index);
 for i=1:len
     dtemp(i)=B(len+1-i);
-    ind(i)=len+1-index(i);
-    vtemp(:,ind(i))=v(:,i);
+    ind(1,i)=len+1-index(1,i);
+    vtemp(:,ind(1,i))=v(:,i);
 end
 d=dtemp;
 v=vtemp;
