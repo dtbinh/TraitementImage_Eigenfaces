@@ -17,7 +17,6 @@ S[];
 figure(1);
 
 for i=1:M
-    //str=strcat(int2str(i),'.bmp');    // concatenates two strings that form the name of the image
     eval('img=imread(str);');
     subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
     imshow(img)
