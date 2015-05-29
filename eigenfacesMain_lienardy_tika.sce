@@ -41,19 +41,19 @@ for i=1:size(S,2)
 end
 
 //Affichage des images normalisées
-abc=0
-for i=1:nbDossiers
-    for j=1:nbImages
-        abc=abc+1;
-        str='s'+string(i)+'/'+string(j)+'.pgm';
-        img=matrix(S(:,i),icol,irow);
-        img=img';
-        imwrite(img,str);
-        subplot(ceil(sqrt(nbDossiers*nbImages)),ceil(sqrt(nbDossiers*nbImages)),abc)
-        imshow(img)
-        drawnow;
-    end
-end
+//abc=0
+//for i=1:nbDossiers
+//    for j=1:nbImages
+//        abc=abc+1;
+//        str='s'+string(i)+'/'+string(j)+'.pgm';
+//        img=matrix(S(:,i),icol,irow);
+//        img=img';
+//        imwrite(img,str);
+//        subplot(ceil(sqrt(nbDossiers*nbImages)),ceil(sqrt(nbDossiers*nbImages)),abc)
+//        imshow(img)
+//        drawnow;
+//    end
+//end
 
 
 // mean image
@@ -70,7 +70,7 @@ A=Sd';
 L=A*A';
 // vv are the eigenvector for L
 // dd are the eigenvalue for both L=Sd'*Sd and C=Sd*Sd';
-[vv dd]=eig(L);
+[vv dd]=spec(L);
 // Sort and eliminate those whose eigenvalue is zero
 v=[];
 d=[];
@@ -82,7 +82,7 @@ for i=1:size(vv,2)
 end
 
 //sort, will return an ascending sequence
-[B index]=sort(d);
+[B index]=gsort(d,'g','i');
 ind=zeros(size(index));
 dtemp=zeros(size(index));
 vtemp=zeros(size(v));
