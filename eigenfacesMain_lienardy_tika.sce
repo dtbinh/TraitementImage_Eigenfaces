@@ -5,7 +5,8 @@
 //---------------------------------------------------------------
 
 //Nombre des images dans notre base de données 
-M=40
+nbDossiers=40
+nbImages=5
 
 
 
@@ -13,9 +14,9 @@ M=40
 //Créer une matrice vide d'images
 S[];
 
-for i=1:M
-    
-    eval('img=imread(string))
+
+        
+    end
 end
 
 
@@ -35,15 +36,10 @@ ustd=80;
 % read and show image
 S=[];    % img matrix
 figure(1);
-for i=1:M
+for i=1:nbDossiers
+    for j=1:nbImages
 str=strcat(int2str(i),'.bmp');    % concatenates two strings that form the name of the image
-eval('img=imread(str);');
-subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
-imshow(img)
-if i==3
-title('Training set','fontsize',18)
-end
-drawnow;
+img=imread(str);
 [irow icol]=size(img);    % get the number of rows (N1) and columns (N2)
 temp=reshape(img',irow*icol,1);    % creates a (N1*N2)x1 vector
 S=[S temp];    % S is a N1*N2xM matrix after finishing the sequence
