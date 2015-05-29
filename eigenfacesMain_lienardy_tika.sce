@@ -8,41 +8,38 @@
 nbDossiers=40
 nbImages=5
 
-
+//std and mean choisis
+um=100;
+ustd=80;
 
 //Lecture et affichage des images 
 //Créer une matrice vide d'images
 S[];
 
-
-        
-    end
-end
-
-
-% Face recognition by Santiago Serrano
+// Face recognition by Santiago Serrano
 
 clear all
 close all
 clc
-% number of images on your training set.
+// number of images on your training set.
 M=50;
 
-% Chosen std and mean.
-% It can be any number that it is close to the std and mean of most of the images.
+// Chosen std and mean.
+// It can be any number that it is close to the std and mean of most of the images.
 um=100;
 ustd=80;
 
-% read and show image
-S=[];    % img matrix
-figure(1);
+// read and show image
+S=[];
+
 for i=1:nbDossiers
     for j=1:nbImages
-str=strcat(int2str(i),'.bmp');    % concatenates two strings that form the name of the image
-img=imread(str);
-[irow icol]=size(img);    % get the number of rows (N1) and columns (N2)
-temp=reshape(img',irow*icol,1);    % creates a (N1*N2)x1 vector
-S=[S temp];    % S is a N1*N2xM matrix after finishing the sequence
+        str=strcat(int2str(i),'.bmp');    
+        img=imread(str);
+        [irow icol]=size(img);    //get the number of rows (N1) and columns (N2)
+        temp=reshape(img',irow*icol,1);    //creates a (N1*N2)x1 vector
+        S=[S temp];    //S is a N1*N2xM matrix after finishing the sequence
+    end
 end
 
 
