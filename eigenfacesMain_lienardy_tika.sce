@@ -15,8 +15,9 @@ ustd=80;
 //Créer une matrice vide d'images
 S[];
 figure(1);
+
 for i=1:M
-    //str=strcat(int2str(i),'.bmp');    % concatenates two strings that form the name of the image
+    //str=strcat(int2str(i),'.bmp');    // concatenates two strings that form the name of the image
     eval('img=imread(str);');
     subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
     imshow(img)
@@ -24,13 +25,16 @@ for i=1:M
         title('Training set','fontsize',18)
     end
     drawnow;
-    [irow icol]=size(img);    % get the number of rows (N1) and columns (N2)
-    temp=reshape(img',irow*icol,1);    % creates a (N1*N2)x1 vector
-    S=[S temp];    % S is a N1*N2xM matrix after finishing the sequence
+    // Nombre des lignes (N1) et des colonnes (N2)
+    [irow icol]=size(img);
+    //creation de (N1*N2)x1 vecteurs
+    temp=reshape(img',irow*icol,1);
+    // S=N1*N2xM matrices après la fin de la séquence
+    S=[S temp];
 end
 
 
-% Here we change the mean and std of all images. We normalize all images.
+//On change mean et std de toutes les images. On normalise toutes les images.
 % This is done to reduce the error due to lighting conditions and background.
 for i=1:size(S,2)
 temp=double(S(:,i));
