@@ -5,8 +5,9 @@
 //---------------------------------------------------------------
 
 //Nombre des images dans notre base de données 
-nbDossiers=20;
-nbImages=5;
+stacksize(200000000);
+nbDossiers=10;
+nbImages=4;
 
 //std and mean choisis
 um=100;
@@ -180,7 +181,7 @@ title('Reconstructed image','fontsize',18)
 InImWeight = [];
 for i=1:size(u,2)
     t = u(:,i)';
-    WeightOfInputImage = dot(t,Difference');
+    WeightOfInputImage = t.*Difference';
     InImWeight = [InImWeight; WeightOfInputImage];
 end
 
