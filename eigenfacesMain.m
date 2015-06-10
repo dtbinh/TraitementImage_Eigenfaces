@@ -18,7 +18,6 @@ ustd=80;
 %Lecture et affichage des images 
 %Créer une matrice vide d'images
 S=[];
-figure(1);
 
 for i=1:nbDossiers
     for j=1:nbImages
