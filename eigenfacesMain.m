@@ -118,7 +118,7 @@ for i=1:size(eigVector,2)
     eigVector(:,i)=eigVector(:,i)./temp;
 end
 
-% Eigenvectors pour la matrice C
+% Eigenvectors pour la matrice de covariance
 NewEigVector=[];
 for i=1:size(eigVector,2)
     temp=sqrt(eigValue(i));
