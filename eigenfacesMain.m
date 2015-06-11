@@ -9,16 +9,16 @@ clc
 % Nombre des images dans notre base de données 
 nbDossiers=15;
 nbImages=7;
-M=40;
+M=nbDossiers*nbImages;
 
-% std and mean choisis
-um=100;
-ustd=80;
+% standard dev and moyenne choisis
+moy=100;
+standD=80;
 
 %Lecture et affichage des images 
-%Créer une matrice vide d'images
-S=[];
-
+%Créer une matrice vide eigValue'images
+tabImages=[];
+%On va parcourir les dossiers et les images par dossier
 for i=1:nbDossiers
     for j=1:nbImages
         chemin='C:\Users\Morgan\Documents\&&Boulot\ENSSAT\IMR2\Traitements_images\Eigenfaces\s';
@@ -27,120 +27,123 @@ for i=1:nbDossiers
         img=imread(str);
         % Nombre des lignes (N1) et des colonnes (N2)
         [irow icol]=size(img);
-        %creation de (N1*N2)x1 vecteurs
+        %creation de N1*N2 vecteurs
         temp=reshape(img',irow*icol,1);
-        % S=N1*N2xM matrices après la fin de la séquence
-        S=[S temp];
+        % tabImages=N1*N2xM matrices après la fin de la séquence
+        tabImages=[tabImages temp];
     end
 end
 
 
 
 
-% On change mean et std de toutes les images. On normalise toutes les images.
-for i=1:size(S,2)
-temp=double(S(:,i));
-m=mean(temp);
-st=std(temp);
-S(:,i)=(temp-m)*ustd/st+um;
+% On change la moyenne et standart deviation de toutes les images. On normalise toutes les images.
+for i=1:size(tabImages,2)
+    temp=double(tabImages(:,i));
+    standartdev=std(temp);
+    moyenne=mean(temp);
+    %mise a jour de nos images
+    tabImages(:,i)=(temp-moyenne)*standD/standartdev+moy;
 end
 
 % Affichage des images normalisées
-figure(2);
+figure(1);
 for i=1:M
-str=strcat(int2str(i),'.jpg');
-img=reshape(S(:,i),icol,irow);
-img=img';
-eval('imwrite(img,str)');
-subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
-imshow(img)
-drawnow;
-if i==3
-title('Le training set normalise') %,'fontsize',18
-end
+    %pour l'affichage, necessite de creer des jpg
+    str=strcat(int2str(i),'.jpg');
+    img=reshape(tabImages(:,i),icol,irow);
+    img=img';
+    eval('imwrite(img,str)');
+    subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
+    imshow(img)
+    drawnow;
+    if i==3
+        title('Le training set normalise')
+    end
 end
 
 
 % mean image
-m=mean(S,2);  % Obtient la moyenne de chaque ligne au lieu de chaque colonne
-tmimg=uint8(m); % converti en 8-bit (0<val<255)
+moyenne=mean(tabImages,2);  % Obtient la moyenne de chaque ligne au lieu de chaque colonne
+tmimg=uint8(moyenne); % converti en 8-bit (0<val<255)
 img=reshape(tmimg,icol,irow); % prend N1*N2 vecteurs et creer N1xN2 matrices
+%passage des lignes en colonnes
 img=img';
-figure(3);
+figure(2);
 imshow(img);
-title('Mean Image') %,'fontsize',18
+title('Mean Image')
 
 % Change image pour manipulation
 dbx=[];
 for i=1:M
-temp=double(S(:,i));
-dbx=[dbx temp];
+    temp=double(tabImages(:,i));
+    dbx=[dbx temp];
 end
 
 % Matrice de covariance C = A'A, L = AA'
 A=dbx';
 L=A*A';
-% vv  : eigenvector pour L
-% dd  : eigenvalue pour L=dbx'*dbx et C=dbx*dbx';
-[vv dd]=eig(L);
+% eigVecL  : eigenvector pour L
+% eigValL  : eigenvalue pour L=dbx'*dbx et C=dbx*dbx';
+[eigVecL eigValL]=eig(L);
 % Tri et supp les val a 0
-v=[];
-d=[];
-for i=1:size(vv,2)
-if(dd(i,i)>1e-4)
-v=[v vv(:,i)];
-d=[d dd(i,i)];
-end
+eigVector=[];
+eigValue=[];
+for i=1:size(eigVecL,2)
+    if(eigValL(i,i)>1e-4)
+        eigVector=[eigVector eigVecL(:,i)];
+        eigValue=[eigValue eigValL(i,i)];
+    end
 end
 
 % Tri croissant
-[B index]=sort(d);
+[B index]=sort(eigValue);
 ind=zeros(size(index));
 dtemp=zeros(size(index));
-vtemp=zeros(size(v));
+vtemp=zeros(size(eigVector));
 len=length(index);
 for i=1:len
-dtemp(i)=B(len+1-i);
-ind(i)=len+1-index(i);
-vtemp(:,ind(i))=v(:,i);
+    dtemp(i)=B(len+1-i);
+    ind(i)=len+1-index(i);
+    vtemp(:,ind(i))=eigVector(:,i);
 end
-d=dtemp;
-v=vtemp;
+eigValue=dtemp;
+eigVector=vtemp;
 
 
-% Normalise eigenvectors
-for i=1:size(v,2)
-kk=v(:,i);
-temp=sqrt(sum(kk.^2));
-v(:,i)=v(:,i)./temp;
+% Normaliser les eigenvectors
+for i=1:size(eigVector,2)
+    NewEigValue=eigVector(:,i);
+    temp=sqrt(sum(NewEigValue.^2));
+    eigVector(:,i)=eigVector(:,i)./temp;
 end
 
 % Eigenvectors pour la matrice C
-u=[];
-for i=1:size(v,2)
-temp=sqrt(d(i));
-u=[u (dbx*v(:,i))./temp];
+NewEigVector=[];
+for i=1:size(eigVector,2)
+    temp=sqrt(eigValue(i));
+    NewEigVector=[NewEigVector (dbx*eigVector(:,i))./temp];
 end
 
 % Normalise pour eigenvectors
-for i=1:size(u,2)
-kk=u(:,i);
-temp=sqrt(sum(kk.^2));
-u(:,i)=u(:,i)./temp;
+for i=1:size(NewEigVector,2)
+    NewEigValue=NewEigVector(:,i);
+    temp=sqrt(sum(NewEigValue.^2));
+    NewEigVector(:,i)=NewEigVector(:,i)./temp;
 end
 
 
 % montre les eigenfaces
-figure(4);
-for i=1:size(u,2)
-img=reshape(u(:,i),icol,irow);
-img=img';
-img=histeq(img,255);
-subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
-imshow(img)
-drawnow;
-if i==3
-title('Eigenfaces')%,'fontsize',18
+figure(3);
+for i=1:size(NewEigVector,2)
+    img=reshape(NewEigVector(:,i),icol,irow);
+    img=img';
+    img=histeq(img,255);
+    subplot(ceil(sqrt(M)),ceil(sqrt(M)),i)
+    imshow(img)
+    drawnow;
+    if i==3
+title('Eigenfaces')
 end
 end
 
@@ -148,71 +151,72 @@ end
 % Trouve le poids de chaque image du training set
 omega = [];
 for h=1:size(dbx,2)
-WW=[];
-for i=1:size(u,2)
-t = u(:,i)';
-WeightOfImage = dot(t,dbx(:,h)');
-WW = [WW; WeightOfImage];
-end
-omega = [omega WW];
+    matricePoids=[];
+    for i=1:size(NewEigVector,2)
+        t = NewEigVector(:,i)';
+        poidsImage = dot(t,dbx(:,h)');
+        matricePoids = [matricePoids; poidsImage];
+    end
+    omega = [omega matricePoids];
 end
 
 
 % Pour une image a inserer 
 % Ex : 's5\8.pgm'
-InputImage = input('Please enter the name of the image and its extension \n','s');
-InputImage = imread(strcat('C:\Users\Morgan\Documents\&&Boulot\ENSSAT\IMR2\Traitements_images\Eigenfaces\',InputImage));
-figure(5)
+imageATest = input('Image a tester (exemple : s3\2.pgm) \n','s');
+imageATest = imread(strcat('C:\Users\Morgan\Documents\&&Boulot\ENSSAT\IMR2\Traitements_images\Eigenfaces\',imageATest));
+%imageATest = imread(strcat('C:\Users\Jihade\Documents\ENSSAT2\Traitement_images\Cariou\Projet_Eigenfaces\',imageATest));
+figure(4)
 subplot(1,2,1)
-imshow(InputImage); colormap('gray');title('Input image')%,'fontsize',18
-InImage=reshape(double(InputImage)',irow*icol,1);
+imshow(imageATest); colormap('gray');title('Input image')
+InImage=reshape(double(imageATest)',irow*icol,1);
 temp=InImage;
 me=mean(temp);
-st=std(temp);
-temp=(temp-me)*ustd/st+um;
+standartdev=std(temp);
+temp=(temp-me)*standD/standartdev+moy;
 NormImage = temp;
-Difference = temp-m;
+Difference = temp-moyenne;
 
 p = [];
-aa=size(u,2);
+aa=size(NewEigVector,2);
 for i = 1:aa
-pare = dot(NormImage,u(:,i));
-p = [p; pare];
+    pare = dot(NormImage,NewEigVector(:,i));
+    p = [p; pare];
 end
-ReshapedImage = m + u(:,1:aa)*p; %m est l'image moyenne, u est l'eigenvector
+ReshapedImage = moyenne + NewEigVector(:,1:aa)*p; %moyenne est l'image moyenne, NewEigVector est l'eigenvector
 ReshapedImage = reshape(ReshapedImage,icol,irow);
 ReshapedImage = ReshapedImage';
 %Montre l'image reconstruite
 subplot(1,2,2)
 imagesc(ReshapedImage); colormap('gray');
-title('Image reconstruite ')%,'fontsize',18
+title('Image reconstruite ')
 
 InImWeight = [];
-for i=1:size(u,2)
-t = u(:,i)';
-WeightOfInputImage = dot(t,Difference');
-InImWeight = [InImWeight; WeightOfInputImage];
+for i=1:size(NewEigVector,2)
+    t = NewEigVector(:,i)';
+    WeightOfInputImage = dot(t,Difference');
+    InImWeight = [InImWeight; WeightOfInputImage];
 end
 
 ll = 1:M;
-figure(68)
+figure(5)
 subplot(1,2,1)
 stem(ll,InImWeight)
-title('Poids de l image inseree')%,'fontsize',14
+title('Poids de l image inseree')
 
 % Find  distance Euclidienne
 e=[];
 for i=1:size(omega,2)
-q = omega(:,i);
-DiffWeight = InImWeight-q;
-mag = norm(DiffWeight);
-e = [e mag];
+    q = omega(:,i);
+    DiffWeight = InImWeight-q;
+    mag = norm(DiffWeight);
+    e = [e mag];
 end
 
-kk = 1:size(e,2);
+NewEigValue = 1:size(e,2);
 subplot(1,2,2)
-stem(kk,e)
-title('Distance Euclidienne de l image inseree')%,'fontsize',14
+stem(NewEigValue,e)
+title('Distance Euclidienne de l image inseree')
 
-MaximumValue=max(e)  % maximum eucledian distance
-MinimumValue=min(e)    % minimum eucledian distance
+MaximumValue=max(e)  % distance eucledian maximum  
+MinimumValue=min(e)    % distance eucledian minimum  
